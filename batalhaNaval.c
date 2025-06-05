@@ -1,40 +1,82 @@
 #include <stdio.h>
 
-// Desafio Batalha Naval - MateCheck
-// Este código inicial serve como base para o desenvolvimento do sistema de Batalha Naval.
-// Siga os comentários para implementar cada parte do desafio.
+// torre vai pra direita usando recursao
+void torre(int n) {
+    if (n <= 0) {
+        return;
+    }
+    printf("Direita\n");
+    torre(n - 1);
+}
+
+// rainha vai pra esquerda com recursao tambem
+void rainha(int n) {
+    if (n == 0) {
+        return;
+    }
+    printf("Esquerda\n");
+    rainha(n - 1);
+}
+
+// bispo vai na diagonal pra cima e direita
+void bispoRec(int n) {
+    if (n == 0) {
+        return;
+    }
+    printf("Cima Direita\n");
+    bispoRec(n - 1);
+}
+
+// cavalo faz dois pra cima e um pra direita (tipo L)
+// usando for e while juntos com break e continue
+void cavalo() {
+    printf("\nMovimento do Cavalo:\n");
+    int i, j;
+    for (i = 0; i < 3; i++) {
+        j = 0;
+        while (j < 2) {
+            if (i < 2 && j == 0) {
+                printf("Cima\n");
+                break;
+            }
+            if (i == 2 && j == 1) {
+                printf("Direita\n");
+            }
+            j++;
+        }
+    }
+}
+
+// outra versao do bispo com dois for
+void bispoLoops() {
+    printf("\nMovimento do Bispo com Loops:\n");
+    int a, b;
+    for (a = 0; a < 5; a++) {
+        for (b = 0; b < 1; b++) {
+            printf("Cima Direita\n");
+        }
+    }
+}
 
 int main() {
-    // Nível Novato - Posicionamento dos Navios
-    // Sugestão: Declare uma matriz bidimensional para representar o tabuleiro (Ex: int tabuleiro[5][5];).
-    // Sugestão: Posicione dois navios no tabuleiro, um verticalmente e outro horizontalmente.
-    // Sugestão: Utilize `printf` para exibir as coordenadas de cada parte dos navios.
 
-    // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
-    // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
-    // Sugestão: Posicione quatro navios no tabuleiro, incluindo dois na diagonal.
-    // Sugestão: Exiba o tabuleiro completo no console, mostrando 0 para posições vazias e 3 para posições ocupadas.
+    // torre anda 5 casas pra direita
+    printf("Movimento da Torre:\n");
+    torre(5);
 
-    // Nível Mestre - Habilidades Especiais com Matrizes
-    // Sugestão: Crie matrizes para representar habilidades especiais como cone, cruz, e octaedro.
-    // Sugestão: Utilize estruturas de repetição aninhadas para preencher as áreas afetadas por essas habilidades no tabuleiro.
-    // Sugestão: Exiba o tabuleiro com as áreas afetadas, utilizando 0 para áreas não afetadas e 1 para áreas atingidas.
+    // bispo recursivo
+    printf("\nMovimento do Bispo:\n");
+    bispoRec(5);
 
-    // Exemplos de exibição das habilidades:
-    // Exemplo para habilidade em cone:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 1 1 1 1 1
-    
-    // Exemplo para habilidade em octaedro:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 0 0 1 0 0
+    // rainha anda 8 pra esquerda
+    printf("\nMovimento da Rainha:\n");
+    rainha(8);
 
-    // Exemplo para habilidade em cruz:
-    // 0 0 1 0 0
-    // 1 1 1 1 1
-    // 0 0 1 0 0
+    // cavalo em L
+    cavalo();
+
+    // bispo com for dentro de for
+    bispoLoops();
 
     return 0;
 }
