@@ -1,95 +1,26 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-// torre vai pra direita usando recursao
-void torre(int n) {
-    if (n <= 0) {
-        return;
-    }
-    printf("Direita\n");
-    torre(n - 1);
-}
-
-// rainha vai pra esquerda com recursao tambem
-void rainha(int n) {
-    if (n == 0) {
-        return;
-    }
-    printf("Esquerda\n");
-    rainha(n - 1);
-}
-
-// bispo vai na diagonal pra cima e direita
-void bispoRec(int n) {
-    if (n == 0) {
-        return;
-    }
-    printf("Cima Direita\n");
-    bispoRec(n - 1);
-}
-
-// cavalo faz dois pra cima e um pra direita (tipo L)
-void cavalo() {
-    printf("\nMovimento do Cavalo:\n");
-    int i, j;
-    for (i = 0; i < 3; i++) {
-        j = 0;
-        while (j < 2) {
-            if (i < 2 && j == 0) {
-                printf("Cima\n");
-                break;
-            }
-            if (i == 2 && j == 1) {
-                printf("Direita\n");
-            }
-            j++;
-        }
-    }
-}
-
-// bispo com dois for
-void bispoLoops() {
-    printf("\nMovimento do Bispo com Loops:\n");
-    int a, b;
-    for (a = 0; a < 5; a++) {
-        for (b = 0; b < 1; b++) {
-            printf("Cima Direita\n");
-        }
-    }
-}
+#define TAM 10
 
 int main() {
-
-    printf("Movimento da Torre:\n");
-    torre(5);
-
-    printf("\nMovimento do Bispo:\n");
-    bispoRec(5);
-
-    printf("\nMovimento da Rainha:\n");
-    rainha(8);
-
-    cavalo();
-
-    bispoLoops();
-
-    // Tabuleiro 10x10
-    printf("\nTabuleiro de Batalha Naval:\n");
-
-    int tabuleiro[10][10];
+    int tabuleiro[TAM][TAM];
     int i, j;
 
-    for (i = 0; i < 10; i++) {
-        for (j = 0; j < 10; j++) {
+    // Inicializar o tabuleiro com 0 (água)
+    for (i = 0; i < TAM; i++) {
+        for (j = 0; j < TAM; j++) {
             tabuleiro[i][j] = 0;
         }
     }
 
-    // Navio horizontal (linha 1, colunas 1 a 3)
+    // Posicionar navios (valor 3)
+    // Horizontal
     tabuleiro[1][1] = 3;
     tabuleiro[1][2] = 3;
-    tabuleiro[1][10] = 3; 
+    tabuleiro[1][3] = 3;
 
-    // Navio vertical
+    // Vertical
     tabuleiro[2][5] = 3;
     tabuleiro[3][5] = 3;
     tabuleiro[4][5] = 3;
@@ -99,15 +30,103 @@ int main() {
     tabuleiro[6][6] = 3;
     tabuleiro[7][7] = 3;
 
-    // Diagonal ↙
+    // Diagonal ↙ (ajustado pra não bater no outro)
+    tabuleiro[2][7] = 3;
     tabuleiro[3][6] = 3;
-    tabuleiro[4][5] = 3;
-    tabuleiro[5][4] = 3;
+    tabuleiro[4][4] = 3;
 
-    // tabuleiro
-    for (i = 0; i < 10; i++) {
-        for (j = 0; j < 10; j++) {
-            printf("%d ", tabuleiro[i][j]);
+    // Matrizes das habilidades (5x5)
+    int cone[5][5];
+    int cruz[5][5];
+    int octaedro[5][5];
+
+    // Cone (forma de V de cabeça pra baixo)
+    for (i = 0; i < 5; i++) {
+        for (j = 0; j < 5; j++) {
+            if ((i == 0 && j == 2) ||
+                (i == 1 && (j >= 1 && j <= 3)) ||
+                (i == 2)) {
+                cone[i][j] = 1;
+            } else {
+                cone[i][j] = 0;
+            }
+        }
+    }
+
+    // Cruz (linha e coluna do meio)
+    for (i = 0; i < 5; i++) {
+        for (j = 0; j < 5; j++) {
+            if (i == 2 || j == 2) {
+                cruz[i][j] = 1;
+            } else {
+                cruz[i][j] = 0;
+            }
+        }
+    }
+
+    // Octaedro (losango com centro no meio)
+    for (i = 0; i < 5; i++) {
+        for (j = 0; j < 5; j++) {
+            if (abs(i - 2) + abs(j - 2) <= 2) {
+                octaedro[i][j] = 1;
+            } else {
+                octaedro[i][j] = 0;
+            }
+        }
+    }
+
+    // Pontos de origem no tabuleiro
+    int origemConeLinha = 1, origemConeCol = 1;
+    int origemCruzLinha = 5, origemCruzCol = 5;
+    int origemOctLinha = 7, origemOctCol = 7;
+
+    // Aplicar as habilidades no tabuleiro com valor 5
+    for (i = 0; i < 5; i++) {
+        for (j = 0; j < 5; j++) {
+            int li, co;
+
+            // Cone
+            li = origemConeLinha - 2 + i;
+            co = origemConeCol - 2 + j;
+            if (li >= 0 && li < TAM && co >= 0 && co < TAM) {
+                if (cone[i][j] == 1 && tabuleiro[li][co] == 0) {
+                    tabuleiro[li][co] = 5;
+                }
+            }
+
+            // Cruz
+            li = origemCruzLinha - 2 + i;
+            co = origemCruzCol - 2 + j;
+            if (li >= 0 && li < TAM && co >= 0 && co < TAM) {
+                if (cruz[i][j] == 1 && tabuleiro[li][co] == 0) {
+                    tabuleiro[li][co] = 5;
+                }
+            }
+
+            // Octaedro
+            li = origemOctLinha - 2 + i;
+            co = origemOctCol - 2 + j;
+            if (li >= 0 && li < TAM && co >= 0 && co < TAM) {
+                if (octaedro[i][j] == 1 && tabuleiro[li][co] == 0) {
+                    tabuleiro[li][co] = 5;
+                }
+            }
+        }
+    }
+
+    // Mostrar o tabuleiro
+    printf("\nTabuleiro Final:\n\n");
+    for (i = 0; i < TAM; i++) {
+        for (j = 0; j < TAM; j++) {
+            if (tabuleiro[i][j] == 0) {
+                printf("~ ");
+            } else if (tabuleiro[i][j] == 3) {
+                printf("# ");
+            } else if (tabuleiro[i][j] == 5) {
+                printf("* ");
+            } else {
+                printf("? ");
+            }
         }
         printf("\n");
     }
