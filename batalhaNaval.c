@@ -28,7 +28,6 @@ void bispoRec(int n) {
 }
 
 // cavalo faz dois pra cima e um pra direita (tipo L)
-// usando for e while juntos com break e continue
 void cavalo() {
     printf("\nMovimento do Cavalo:\n");
     int i, j;
@@ -47,7 +46,7 @@ void cavalo() {
     }
 }
 
-// outra versao do bispo com dois for
+// bispo com dois for
 void bispoLoops() {
     printf("\nMovimento do Bispo com Loops:\n");
     int a, b;
@@ -60,23 +59,58 @@ void bispoLoops() {
 
 int main() {
 
-    // torre anda 5 casas pra direita
     printf("Movimento da Torre:\n");
     torre(5);
 
-    // bispo recursivo
     printf("\nMovimento do Bispo:\n");
     bispoRec(5);
 
-    // rainha anda 8 pra esquerda
     printf("\nMovimento da Rainha:\n");
     rainha(8);
 
-    // cavalo em L
     cavalo();
 
-    // bispo com for dentro de for
     bispoLoops();
+
+    // Tabuleiro 10x10
+    printf("\nTabuleiro de Batalha Naval:\n");
+
+    int tabuleiro[10][10];
+    int i, j;
+
+    for (i = 0; i < 10; i++) {
+        for (j = 0; j < 10; j++) {
+            tabuleiro[i][j] = 0;
+        }
+    }
+
+    // Navio horizontal (linha 1, colunas 1 a 3)
+    tabuleiro[1][1] = 3;
+    tabuleiro[1][2] = 3;
+    tabuleiro[1][10] = 3; 
+
+    // Navio vertical
+    tabuleiro[2][5] = 3;
+    tabuleiro[3][5] = 3;
+    tabuleiro[4][5] = 3;
+
+    // Diagonal ↘
+    tabuleiro[5][5] = 3;
+    tabuleiro[6][6] = 3;
+    tabuleiro[7][7] = 3;
+
+    // Diagonal ↙
+    tabuleiro[3][6] = 3;
+    tabuleiro[4][5] = 3;
+    tabuleiro[5][4] = 3;
+
+    // tabuleiro
+    for (i = 0; i < 10; i++) {
+        for (j = 0; j < 10; j++) {
+            printf("%d ", tabuleiro[i][j]);
+        }
+        printf("\n");
+    }
 
     return 0;
 }
